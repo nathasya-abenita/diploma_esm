@@ -11,6 +11,8 @@ numpy = "^2.4.2"
 matplotlib = "^3.10.8"
 xarray = "^2026.2.0"
 pandas = "^3.0.1"
+ipykernel = "^7.2.0"
+netcdf4 = "^1.7.4"
 
 
 [build-system]
