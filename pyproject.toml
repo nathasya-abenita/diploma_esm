@@ -13,6 +13,7 @@ xarray = "^2026.2.0"
 pandas = "^3.0.1"
 ipykernel = "^7.2.0"
 netcdf4 = "^1.7.4"
+cartopy = "^0.25.0"
 
 
 [build-system]
