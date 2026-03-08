@@ -18,7 +18,7 @@ def load_dataset(file_name):
         "avg_snswrf",
         "avg_snlwrf"
     ]
-
+        
     return ds[variables]
 
 
@@ -28,24 +28,23 @@ def subset_region(ds, bounds):
         longitude=slice(bounds["lon_min"], bounds["lon_max"])
     )
 
-def compute_monthly(ds):
-    ds_monthly = ds.groupby("valid_time.month").mean("valid_time")
+def compute_fluxes(ds):
 
     # Sign convention (upward heat flux positive)
-    ds_monthly["avg_ishf"] = -ds_monthly["avg_ishf"]
-    ds_monthly["avg_slhtf"] = -ds_monthly["avg_slhtf"]
-    ds_monthly["avg_snlwrf"] = -ds_monthly["avg_snlwrf"]
+    ds["avg_ishf"] = -ds["avg_ishf"]
+    ds["avg_slhtf"] = -ds["avg_slhtf"]
+    ds["avg_snlwrf"] = -ds["avg_snlwrf"]
 
     # Net radiation
-    ds_monthly["Rs"] = ds_monthly["avg_snswrf"] - ds_monthly["avg_snlwrf"]
+    ds["Rs"] = ds["avg_snswrf"] - ds["avg_snlwrf"]
 
     # Heat storage
-    ds_monthly["Storage"] = ds_monthly["Rs"] - (ds_monthly["avg_ishf"] + ds_monthly["avg_slhtf"])
+    ds["Storage"] = ds["Rs"] - (ds["avg_ishf"] + ds["avg_slhtf"])
 
-    return ds_monthly
+    return ds
 
 
-def plot_monthly_line(ds_monthly):
+def plot_monthly_line(ds_monthly, out_file_name):
     fig, ax = plt.subplots(figsize=(12, 9))
 
     ds_monthly["Rs"].plot(ax=ax, label="Net Radiation (Rs)", color='k')
@@ -70,13 +69,39 @@ def plot_monthly_line(ds_monthly):
     ax.set_xticklabels(month_labels)
 
     plt.grid()
-    plt.show()
+    plt.savefig(out_file_name)
 
+def plot_hourly_line(ds, time_min, time_max, out_file_name):
+
+    ds_day = ds.sel(valid_time=slice(time_min, time_max))
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    ds_day["Rs"].plot(ax=ax, label="Rs", color='k')
+    ds_day['avg_snswrf'].plot(ax=ax, label="Net Shortwave Radiation", color='yellow', alpha=0.85)
+    ds_day['avg_snlwrf'].plot(ax=ax, label="Net Longwave Radiation", color='tab:green', alpha=0.85)
+
+
+    ds_day["avg_ishf"].plot(ax=ax, label="SH", color='r', linestyle='--')
+    ds_day["avg_slhtf"].plot(ax=ax, label="LH", color='b', linestyle='--')
+    ds_day["Storage"].plot(ax=ax, label="Storage", color='orange', linestyle='--')
+
+    ax.set_xlabel("Hour")
+    ax.set_ylabel("W m$^{-2}$")
+    ax.set_title(f"Surface Energy Budget (ERA5) - Jakarta")
+
+    # ax.set_xticks(ds_day.valid_time)
+    # # Format x-axis to show only hours
+    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%H'))
+
+    # # Optional: set major ticks every hour
+    # ax.xaxis.set_major_locator(mdates.HourLocator(interval=1))
+
+    ax.legend()
+    ax.grid()
+    plt.savefig(out_file_name)
 
 if __name__ == "__main__":
-    # Data location
-    file_name = "./data/lab/surface_budget/vars_ERA5_1991-2020_mean_rates.nc"
-
     # Jakarta bounds
     bounds = dict(
         lon_min=106.67,
@@ -84,7 +109,29 @@ if __name__ == "__main__":
         lat_min=-6.09,
         lat_max=-6.35
     )
+
+    #%% Annual cycle
+
+    file_name = "./data/lab/surface_budget/vars_ERA5_1991-2020_mean_rates.nc"
     ds = load_dataset(file_name)
     ds = subset_region(ds, bounds)
-    ds_monthly = compute_monthly(ds)
-    plot_monthly_line(ds_monthly)
+    ds = ds.groupby("valid_time.month").mean("valid_time") # compute monthly mean
+    ds_monthly = compute_fluxes(ds)
+    plot_monthly_line(ds_monthly, 
+                      out_file_name='./output/surface_budget/annual_cycle.png')
+
+    #%% Diurnal cycle
+
+    file_name = "./data/lab/hourly_surface_budget/dec_2022.nc"
+    ds = load_dataset(file_name)
+    ds = subset_region(ds, bounds)
+    ds = compute_fluxes(ds)
+    plot_hourly_line(ds, time_min='2022-12-29 00:00', time_max='2022-12-29 23:00',
+                     out_file_name='./output/surface_budget/dec_diurnal_cycle.png')
+    
+    file_name = "./data/lab/hourly_surface_budget/oct_2022.nc"
+    ds = load_dataset(file_name)
+    ds = subset_region(ds, bounds)
+    ds = compute_fluxes(ds)
+    plot_hourly_line(ds, time_min='2022-10-06 00:00', time_max='2022-10-12 23:00',
+                     out_file_name='./output/surface_budget/oct_diurnal_cycle.png')

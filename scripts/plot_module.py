@@ -170,7 +170,7 @@ def plot_contourf_nonmap (file_name, var_name, title, output_file_name, xvar, yv
     plt.savefig(output_file_name)
 
 def plot_map (file_name, var_name, title, output_file_name, xvar, yvar, levels=10, 
-              squeeze=None,operator=None, north=None, mollweide=True, cmap='turbo', extend=None):
+              squeeze=None,operator=None, north=None, mollweide=True, cmap='turbo', extend=None, cbar_label=None):
     # Read data 
     ds = xr.open_dataset(file_name)
     if squeeze != None:
@@ -196,7 +196,8 @@ def plot_map (file_name, var_name, title, output_file_name, xvar, yvar, levels=1
             ax.set_extent([-180, 180, -90, 0], crs=ccrs.PlateCarree())
 
     # Color bar label
-    cbar_label = rf"{ds[var_name].attrs['long_name']} ({ds[var_name].attrs['units']})"
+    if cbar_label == None:
+        cbar_label = rf"{ds[var_name].attrs['long_name']} ({ds[var_name].attrs['units']})"
 
     # Plot variable
     cf = xr.plot.contourf(ds[var_name], ax=ax, x=xvar, y=yvar, transform=ccrs.PlateCarree(),
