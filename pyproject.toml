@@ -14,6 +14,8 @@ pandas = "^3.0.1"
 ipykernel = "^7.2.0"
 netcdf4 = "^1.7.4"
 cartopy = "^0.25.0"
+geopandas = "^1.1.2"
+contextily = "^1.7.0"
 
 
 [build-system]
