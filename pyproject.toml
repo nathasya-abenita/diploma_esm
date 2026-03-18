@@ -16,6 +16,9 @@ netcdf4 = "^1.7.4"
 cartopy = "^0.25.0"
 geopandas = "^1.1.2"
 contextily = "^1.7.0"
+regionmask = "^0.13.0"
+scipy = "^1.17.1"
+cdsapi = "^0.7.7"
 
 
 [build-system]
