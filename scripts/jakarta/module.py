@@ -1,5 +1,6 @@
 import xarray as xr
 import matplotlib.pyplot as plt
+import numpy as np
 
 """
 ERA5 variables
@@ -20,13 +21,6 @@ def load_dataset(file_name):
     ]
         
     return ds[variables]
-
-
-def subset_region(ds, bounds):
-    return ds.sel(
-        latitude=slice(bounds["lat_min"], bounds["lat_max"]),
-        longitude=slice(bounds["lon_min"], bounds["lon_max"])
-    )
 
 def compute_fluxes(ds):
 
@@ -71,9 +65,12 @@ def plot_monthly_line(ds_monthly, out_file_name):
     plt.grid()
     plt.savefig(out_file_name)
 
-def plot_hourly_line(ds, time_min, time_max, out_file_name):
+def plot_hourly_line(ds, time_min, time_max, out_file_name, title):
 
+    ds = ds.assign_coords(valid_time = ds.valid_time + np.timedelta64(7, "h"))
     ds_day = ds.sel(valid_time=slice(time_min, time_max))
+    # Compute diurnal cycle (average by hour)
+    ds_day = ds_day.groupby("valid_time.hour").mean()
 
     fig, ax = plt.subplots(figsize=(12, 6))
 
@@ -86,52 +83,37 @@ def plot_hourly_line(ds, time_min, time_max, out_file_name):
     ds_day["avg_slhtf"].plot(ax=ax, label="LH", color='b', linestyle='--')
     ds_day["Storage"].plot(ax=ax, label="Storage", color='orange', linestyle='--')
 
-    ax.set_xlabel("Hour")
+    ax.set_xlabel("Local Hour")
     ax.set_ylabel("W m$^{-2}$")
-    ax.set_title(f"Surface Energy Budget (ERA5) - Jakarta")
-
-    # ax.set_xticks(ds_day.valid_time)
-    # # Format x-axis to show only hours
-    # ax.xaxis.set_major_formatter(mdates.DateFormatter('%H'))
-
-    # # Optional: set major ticks every hour
-    # ax.xaxis.set_major_locator(mdates.HourLocator(interval=1))
+    ax.set_title(f"Surface Energy Budget (ERA5) - Jakarta - {title}")
 
     ax.legend()
     ax.grid()
     plt.savefig(out_file_name)
 
-if __name__ == "__main__":
-    # Jakarta bounds
-    bounds = dict(
-        lon_min=106.67,
-        lon_max=106.97,
-        lat_min=-6.09,
-        lat_max=-6.35
+def representative_cell(ds, lon, lat):
+    """
+    Return a representative time series at (lon, lat) by:
+    1. Finding the nearest grid cell
+    2. Taking the 2×2 neighborhood around it
+    3. Averaging those 4 values
+    """
+
+    # 1. Find nearest grid cell
+    pt = ds.sel(longitude=lon, latitude=lat, method="nearest")
+    lon0 = float(pt.longitude)
+    lat0 = float(pt.latitude)
+
+    # 2. Get index of that grid cell
+    ilon = ds.longitude.to_index().get_loc(lon0)
+    ilat = ds.latitude.to_index().get_loc(lat0)
+
+    # 3. Select the 2×2 neighborhood
+    ds4 = ds.isel(
+        longitude=slice(ilon, ilon + 2),
+        latitude=slice(ilat, ilat + 2)
     )
+    # print(ds4.coords)
 
-    #%% Annual cycle
-
-    file_name = "./data/lab/surface_budget/vars_ERA5_1991-2020_mean_rates.nc"
-    ds = load_dataset(file_name)
-    ds = subset_region(ds, bounds)
-    ds = ds.groupby("valid_time.month").mean("valid_time") # compute monthly mean
-    ds_monthly = compute_fluxes(ds)
-    plot_monthly_line(ds_monthly, 
-                      out_file_name='./output/surface_budget/annual_cycle.png')
-
-    #%% Diurnal cycle
-
-    file_name = "./data/lab/hourly_surface_budget/dec_2022.nc"
-    ds = load_dataset(file_name)
-    ds = subset_region(ds, bounds)
-    ds = compute_fluxes(ds)
-    plot_hourly_line(ds, time_min='2022-12-29 00:00', time_max='2022-12-29 23:00',
-                     out_file_name='./output/surface_budget/dec_diurnal_cycle.png')
-    
-    file_name = "./data/lab/hourly_surface_budget/oct_2022.nc"
-    ds = load_dataset(file_name)
-    ds = subset_region(ds, bounds)
-    ds = compute_fluxes(ds)
-    plot_hourly_line(ds, time_min='2022-10-06 00:00', time_max='2022-10-12 23:00',
-                     out_file_name='./output/surface_budget/oct_diurnal_cycle.png')
+    # 4. Average to get one representative time series
+    return ds4.mean(dim=("latitude", "longitude"))
