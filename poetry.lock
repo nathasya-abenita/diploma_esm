@@ -650,6 +650,30 @@ files = [
 tests = ["asttokens (>=2.1.0)", "coverage", "coverage-enable-subprocess", "ipython", "littleutils", "pytest", "rich"]
 
 [[package]]
+name = "flox"
+version = "0.11.2"
+description = "GroupBy operations for dask.array"
+optional = false
+python-versions = ">=3.11"
+files = [
+    {file = "flox-0.11.2-py3-none-any.whl", hash = "sha256:d3932bfe9e26729dd7e471c4d448abeaee7a62272621f584de0e704b3c0665cb"},
+    {file = "flox-0.11.2.tar.gz", hash = "sha256:ca48d391e4a06cdf1c24368bf73114191851149611a5b318d82436fa713efdf0"},
+]
+
+[package.dependencies]
+numpy = ">=1.26"
+numpy_groupies = ">=0.9.19"
+packaging = ">=21.3"
+pandas = ">=2.1"
+scipy = ">=1.12"
+toolz = "*"
+
+[package.extras]
+all = ["cachey", "dask", "numba", "numbagg", "xarray"]
+docs = ["cubed (>=0.20.0)", "cubed-xarray", "dask", "furo (>=2024.08)", "ipykernel", "jupyter", "matplotlib", "myst-nb", "myst-parser", "numpydoc", "pyarrow", "sparse", "sphinx", "sphinx-codeautolink", "sphinx-copybutton", "sphinx-remove-toctrees", "xarray"]
+test = ["netCDF4"]
+
+[[package]]
 name = "fonttools"
 version = "4.61.1"
 description = "Tools to manipulate font files"
@@ -1316,6 +1340,24 @@ files = [
     {file = "numpy-2.4.2-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:be71bf1edb48ebbbf7f6337b5bfd2f895d1902f6335a5830b20141fc126ffba0"},
     {file = "numpy-2.4.2.tar.gz", hash = "sha256:659a6107e31a83c4e33f763942275fd278b21d095094044eb35569e86a21ddae"},
 ]
+
+[[package]]
+name = "numpy-groupies"
+version = "0.11.3"
+description = "Optimised tools for group-indexing operations: aggregated sum and more."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "numpy_groupies-0.11.3-py3-none-any.whl", hash = "sha256:d4065dd5d56fda941ad5a7c80a7f80b49f671ed148aaa3e243a0e4caa71adcb3"},
+    {file = "numpy_groupies-0.11.3.tar.gz", hash = "sha256:aed4afdad55e856b9e737fe4b4673c77e47c2f887c3663a18baaa200407c23e0"},
+]
+
+[package.dependencies]
+numpy = "*"
+
+[package.extras]
+dev = ["numba", "pandas", "pytest"]
+fast = ["numba"]
 
 [[package]]
 name = "packaging"
@@ -2261,6 +2303,17 @@ pure-eval = "*"
 tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
+name = "toolz"
+version = "1.1.0"
+description = "List processing tools and functional utilities"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "toolz-1.1.0-py3-none-any.whl", hash = "sha256:15ccc861ac51c53696de0a5d6d4607f99c210739caf987b5d2054f3efed429d8"},
+    {file = "toolz-1.1.0.tar.gz", hash = "sha256:27a5c770d068c110d9ed9323f24f1543e83b2f300a687b7891c1a6d56b697b5b"},
+]
+
+[[package]]
 name = "tornado"
 version = "6.5.4"
 description = "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed."
@@ -2393,6 +2446,29 @@ types = ["pandas-stubs", "scipy-stubs", "types-PyYAML", "types-Pygments", "types
 viz = ["cartopy (>=0.23)", "matplotlib (>=3.8)", "nc-time-axis", "seaborn"]
 
 [[package]]
+name = "xarray-regrid"
+version = "0.4.2"
+description = "Regridding tools using xarray and flox."
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "xarray_regrid-0.4.2-py3-none-any.whl", hash = "sha256:85c575fd5683b296b18a333038f743617d06c1994cd52562e7cfae4a5b8d862f"},
+    {file = "xarray_regrid-0.4.2.tar.gz", hash = "sha256:96525d39b0290efa59e0255cebd35be028052f1b347bfb10fd259b4380289673"},
+]
+
+[package.dependencies]
+flox = "*"
+numpy = "*"
+scipy = "*"
+xarray = "*"
+
+[package.extras]
+accel = ["dask[distributed]", "opt-einsum", "sparse"]
+benchmarking = ["aiohttp", "cftime", "h5netcdf", "matplotlib", "pooch", "requests", "zarr"]
+dev = ["hatch", "mypy", "pandas-stubs", "pytest", "pytest-cov", "ruff"]
+docs = ["coverage[toml]", "myst-nb", "myst-parser", "sphinx", "sphinx-autoapi", "sphinx-rtd-theme"]
+
+[[package]]
 name = "xyzservices"
 version = "2025.11.0"
 description = "Source of XYZ tiles providers"
@@ -2406,4 +2482,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "91057982aa07e8519183f65aa75fee579a5e9902531ab26d0aab9b7d89aa925f"
+content-hash = "f163d646ba58991c6b4d3df5d8a2bbb2179e236b4d46c4a1512be49c072c1616"
