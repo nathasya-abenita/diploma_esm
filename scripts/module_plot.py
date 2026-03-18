@@ -5,6 +5,10 @@ Description: All about plottings with xarray!
 """ 
 
 #%% Import packages
+import geopandas as gpd
+from shapely.geometry import Polygon, Point
+import contextily as ctx
+
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
@@ -226,4 +230,67 @@ def activate_geo_grid (ax):
     gl.right_labels = False 
     # Format lon/lat labels 
     gl.xformatter = LongitudeFormatter() 
-    gl.yformatter = LatitudeFormatter() 
+    gl.yformatter = LatitudeFormatter()
+
+def plot_ds_sub_grids(ds_sub, lon_name="longitude", lat_name="latitude"):
+    """
+    Plot all grid cells in ds_sub as polygons and their center coordinates as points.
+    """
+
+    # Extract coordinates
+    lons = ds_sub[lon_name].values
+    lats = ds_sub[lat_name].values
+
+    # Infer resolution (assumes regular grid)
+    res_lon = 0.25
+    res_lat = 0.25
+
+    polys = []
+    points = []
+
+    # Build polygons + center points
+    for lon in lons:
+        for lat in lats:
+            lon_min = lon - res_lon / 2
+            lon_max = lon + res_lon / 2
+            lat_min = lat - res_lat / 2
+            lat_max = lat + res_lat / 2
+
+            poly = Polygon([
+                (lon_min, lat_min),
+                (lon_min, lat_max),
+                (lon_max, lat_max),
+                (lon_max, lat_min)
+            ])
+            polys.append(poly)
+            points.append(Point(lon, lat))
+
+    # GeoDataFrames
+    gdf_poly = gpd.GeoDataFrame({"geometry": polys}, crs="EPSG:4326")
+    gdf_pts = gpd.GeoDataFrame({"geometry": points}, crs="EPSG:4326")
+    print(gdf_pts)
+    # Reproject for contextily
+    gdf_poly_web = gdf_poly.to_crs(epsg=3857)
+    gdf_pts_web = gdf_pts.to_crs(epsg=3857)
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(8, 8))
+
+    # gdf_poly_web.boundary.plot(ax=ax, linewidth=1, edgecolor="red")
+    # gdf_poly_web.plot(ax=ax, alpha=0.2, color="red")
+    gdf_pts_web.plot(ax=ax, color="blue", markersize=10)
+
+    # Adjust limits
+    xmin, ymin, xmax, ymax = gdf_poly_web.total_bounds
+    alpha = 0.3
+    dx, dy = xmax - xmin, ymax - ymin
+    ax.set_xlim([xmin - dx * alpha, xmax + dx * alpha])
+    ax.set_ylim([ymin - dy * alpha, ymax + dy * alpha])
+
+    # Basemap
+    ctx.add_basemap(ax)
+
+    ax.set_title("Grid Cells and Center Coordinates")
+    ax.set_axis_off()
+
+    plt.show()
