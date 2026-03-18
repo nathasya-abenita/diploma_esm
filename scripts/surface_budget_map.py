@@ -1,5 +1,5 @@
 import numpy as np
-from plot_module import plot_map
+from module_plot import plot_map
 
 if __name__ == '__main__':
 
