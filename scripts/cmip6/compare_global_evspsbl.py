@@ -25,9 +25,10 @@ def compare_precipitation (path_model, varname_model, path_obs, varname_obs, mod
     # ds_obs = ds_obs.rename({"longitude": "lon", "latitude": "lat"})
 
     # Organize
-    pr = ds_model[varname_model] * 86400     #
+    pr = ds_model[varname_model] * -86400     #
     tp = ds_obs[varname_obs] * 1e3      # m to mm
-    tp = tp.sortby("lat")                # fix orientation
+    print(pr.shape)
+    print(tp.shape)
 
     #%% MBE 
 
@@ -46,7 +47,7 @@ def compare_precipitation (path_model, varname_model, path_obs, varname_obs, mod
     ax = plt.axes(projection=ccrs.Mollweide(central_longitude=180))
     cf = xr.plot.contourf(bias, ax=ax, x='lon', y='lat', transform=ccrs.PlateCarree(),
                         cbar_kwargs={'label': 'MBE (mm/d)', 'orientation': 'horizontal', 'pad': 0.05}, 
-                        cmap="BrBG", levels=np.linspace(-10, 10, 11))
+                        cmap='BrBG', levels=np.linspace(-10, 10, 11))
 
     # Add border
     ax.coastlines() 
@@ -58,7 +59,7 @@ def compare_precipitation (path_model, varname_model, path_obs, varname_obs, mod
     plt.tight_layout()
 
     # Save
-    plt.savefig(f'output/cmip6/pr_mbe_{model_name}.png')
+    plt.savefig(f'output/cmip6/e_mbe_{model_name}.png')
     plt.close()
 
     #%% R
@@ -91,9 +92,10 @@ def compare_precipitation (path_model, varname_model, path_obs, varname_obs, mod
     # Plot
     fig = plt.figure(figsize=(10, 6)) 
     ax = plt.axes(projection=ccrs.Mollweide(central_longitude=180))
-    cf = xr.plot.contourf(bias, ax=ax, x='lon', y='lat', transform=ccrs.PlateCarree(),
+    cf = xr.plot.pcolormesh(bias, ax=ax, x='lon', y='lat', transform=ccrs.PlateCarree(),
                         cbar_kwargs={'label': 'R', 'orientation': 'horizontal', 'pad': 0.05}, 
                         cmap='BrBG', levels=np.linspace(-1, 1, 11))
+
 
     # Add border
     ax.coastlines() 
@@ -105,24 +107,24 @@ def compare_precipitation (path_model, varname_model, path_obs, varname_obs, mod
     plt.tight_layout()
 
     # Save
-    plt.savefig(f'output/cmip6/pr_r_{model_name}.png')
+    plt.savefig(f'output/cmip6/e_r_{model_name}.png')
 
 if __name__ == '__main__':
     # File names
-    path_model = r'./data/cmip6/historical/pr_Amon_FIO-ESM-2-0_historical.nc'
-    varname_model = 'pr'
-    path_obs = r'data/cmip6/era5_to_fio/tp.nc'
-    varname_obs = 'tp'
+    path_model = r'./data/cmip6/historical/evspsbl_Amon_FIO-ESM-2-0_historical.nc'
+    varname_model = 'evspsbl'
+    path_obs = r'data/cmip6/era5_to_fio/evaporation.nc'
+    varname_obs = 'e'
     model_name = 'FIO-ESM-2-0'
 
     # Call
     compare_precipitation (path_model, varname_model, path_obs, varname_obs, model_name)
 
     # File names
-    path_model = r'./data/cmip6/historical/pr_Amon_ACCESS-CM2_historical.nc'
-    varname_model = 'pr'
-    path_obs = r'data/cmip6/era5_to_access/tp.nc'
-    varname_obs = 'tp'
+    path_model = r'./data/cmip6/historical/evspsbl_Amon_ACCESS-CM2_historical.nc'
+    varname_model = 'evspsbl'
+    path_obs = r'data/cmip6/era5_to_access/evaporation.nc'
+    varname_obs = 'e'
     model_name = 'ACCESS-CM2'
 
     # Call

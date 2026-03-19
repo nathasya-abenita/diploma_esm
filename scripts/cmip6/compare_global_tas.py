@@ -20,7 +20,7 @@ def compare_precipitation (path_model, varname_model, path_obs, varname_obs, mod
     # Read files
     ds_model = xr.open_dataset(path_model)
     ds_obs = xr.open_dataset(path_obs)
-    ds_obs = ds_obs.rename({"longitude": "lon", "latitude": "lat"})
+    # ds_obs = ds_obs.rename({"longitude": "lon", "latitude": "lat"})
 
     # Organize
     pr = ds_model[varname_model] 
@@ -107,9 +107,9 @@ def compare_precipitation (path_model, varname_model, path_obs, varname_obs, mod
 
 if __name__ == '__main__':
     # File names
-    path_model = r'./data/cmip6/tas_Amon_FIO-ESM-2-0_historical_regrid.nc'
+    path_model = r'./data/cmip6/historical/tas_Amon_FIO-ESM-2-0_historical.nc'
     varname_model = 'tas'
-    path_obs = r'data/cmip6/era5/data_stream-moda_stepType-avgua.nc'
+    path_obs = r'data/cmip6/era5_to_fio/t2m.nc'
     varname_obs = 't2m'
     model_name = 'FIO-ESM-2-0'
 
@@ -117,8 +117,10 @@ if __name__ == '__main__':
     compare_precipitation (path_model, varname_model, path_obs, varname_obs, model_name)
 
     # File names
-    path_model = r'./data/cmip6/tas_Amon_ACCESS-CM2_historical_regrid.nc'
+    path_model = r'./data/cmip6/historical/tas_Amon_ACCESS-CM2_historical_regrid.nc'
     varname_model = 'tas'
+    path_obs = r'data/cmip6/era5_to_access/t2m.nc'
+    varname_obs = 't2m'
     model_name = 'ACCESS-CM2'
 
     # Call
