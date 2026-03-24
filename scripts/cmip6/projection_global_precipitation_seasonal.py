@@ -35,8 +35,8 @@ def compare_seasonal_change(path_hist, path_proj, varname):
     proj_JJA = seasonal_mean(ds_proj, varname, "JJA")
 
     # Compute changes
-    diff_DJF = proj_DJF - hist_DJF
-    diff_JJA = proj_JJA - hist_JJA
+    diff_DJF = (proj_DJF - hist_DJF) / hist_DJF * 100
+    diff_JJA = (proj_JJA - hist_JJA) / hist_JJA * 100
 
     return diff_DJF, diff_JJA
 
@@ -59,7 +59,7 @@ def plot_two_models(model_results, model_names):
             all_values.append(d.values)
 
     vmax = np.nanpercentile(np.abs(np.concatenate([v.flatten() for v in all_values])), 99)
-    levels = np.linspace(-vmax, vmax, 15)
+    levels = np.linspace(-vmax, vmax, 11)
 
     for i, (diff_DJF, diff_JJA) in enumerate(model_results):
         for j, diff in enumerate([diff_DJF, diff_JJA]):
@@ -81,7 +81,9 @@ def plot_two_models(model_results, model_names):
 
             # Add colorbar
             cbar = fig.colorbar(cf, ax=ax, orientation="horizontal", pad=0.05)
-            cbar.set_label("mm/day")
+            cbar.set_label("%")
+            cbar.set_ticks(levels)
+            cbar.set_ticklabels([f"{lev:.1f}" for lev in levels])
     plt.suptitle('Historical (1981-2010) vs SSP5-8.5 (2051-2080) Mean', y=0.92)
     plt.tight_layout()
     plt.savefig("output/cmip6/pr_seasonal_change.png", dpi=300)
