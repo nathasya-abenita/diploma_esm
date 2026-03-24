@@ -57,8 +57,8 @@ def plot_two_models(model_results, model_names):
         for d in diffs:
             all_values.append(d.values)
 
-    vmax = np.nanpercentile(np.abs(np.concatenate([v.flatten() for v in all_values])), 99)
-    levels = np.linspace(-vmax, vmax, 15)
+    vmax = np.nanpercentile(np.abs(np.concatenate([v.flatten() for v in all_values])), 98)
+    levels = np.linspace(0.5, 3.5, 9)
 
     for i, (diff_DJF, diff_JJA) in enumerate(model_results):
         for j, diff in enumerate([diff_DJF, diff_JJA]):
@@ -67,7 +67,7 @@ def plot_two_models(model_results, model_names):
             cf = diff.plot.contourf(
                 ax=ax,
                 transform=ccrs.PlateCarree(),
-                cmap="coolwarm",
+                cmap="OrRd",
                 levels=levels,
                 add_colorbar=False
             )
