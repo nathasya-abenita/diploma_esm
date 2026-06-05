@@ -17,7 +17,7 @@
 \input{loadslides.tex} % Loads packages and some defined commands
 
 \title[
-% Text entered here will appear in the bottom middle
+Anthropogenic Intensification of Short-Duration Rainfall Extremes
 ]{Anthropogenic Intensification of \\Short-Duration Rainfall Extremes}
 \subtitle{Based on \citet{fowler2021}}
 
@@ -29,10 +29,10 @@
 }
 
 \institute{
-    Earth System Modelling Course \\
-    Earth System Physics Section \\
-    The Abdus Salam International Centre for Theoretical Physics}
-\date{\today}
+    Earth System Modelling \\
+    Earth System Physics \\
+    ICTP}
+\date{June 5, 2026}
 
 \begin{document}
 
@@ -51,8 +51,8 @@
 \begin{frame}
     \begin{block}{Motivation}
         \begin{itemize}
-            \item Intensification of the hydrological cycle is a known effect of a warming climate, including rainfall extremes increase.
-            \item Uncertainty remains in understanding changes to short-duration (1--3 h) and convective (tens of kilometers or less) events.
+            \item Intensification of the hydrological cycle is a known effect of a warming climate.%, including rainfall extremes increase.
+            \item Uncertainty remains in understanding changes to \textbf{short-duration} and \textbf{convective} events.
             \item Short-duration rainfall extremes are responsible for fatalities through flash floods and landslides.
         \end{itemize}
         
@@ -60,20 +60,19 @@
 
     \begin{block}{Goals}
         \begin{itemize}
-            \item Review observed trends and temperature-scaling studies, with insight from high-resolution climate models.
-            \item Propose a conceptual framework to understand the intensification and its implications for flood risks.
-            \item Address some gaps in the current knowledge.
+            \item Review observational and modelling evidences for the intensification of these extremes
+            \item Understand future floods risks
         \end{itemize}
     \end{block}
 \end{frame}
 
 \section{Thermodynamics Baseline}
 
-\subsection{Claysius-Clapeyron (CC) Relation}
+\subsection{Clausius-Clapeyron (CC) Relation}
 \begin{frame}
     \begin{itemize}
-        \item By (CC) relation, the saturation specific humidity of the atmosphere increases at a rate of $\sim7\%$ per degree warming near the Earth's surface.
-        \item Given other atmospher conditions (e.g RH) remain constant across, the absolute (specific) humidity of air also increases at roughly the same rate.
+        \item Saturation specific humidity of the atmosphere increases at a rate of $\sim7\%$ per degree warming near the Earth's surface. 
+        \item Assuming constant relative humidity, specific humidity of air also increases at roughly the same rate.
         \item As rainfall extremes are limited by the amount of atmospheric moisture available, changes to rainfall intensities are expected to scale with the CC relation.
     \end{itemize}
 \end{frame}
@@ -82,42 +81,32 @@
 \begin{frame}
     \begin{definition}
         \begin{itemize}
-            \item Apparent scaling: Between extreme rainfall intensities and temperature from observed short-term climate variability.
-            \item Climate scaling: How extreme rainfall will respond in a changing climate.
+            \item \textbf{Apparent scaling:} Between extreme rainfall intensities and temperature from \textbf{observed} short-term climate variability.
+            \item \textbf{Climate scaling:} How extreme rainfall will respond in a changing climate.
         \end{itemize}
     \end{definition}
 \end{frame}
 
 \begin{frame}
-    \begin{columns}[onlytextwidth]
-        \column{0.5\textwidth}
-        \begin{itemize}
-            \item Daily extremes mainly show apparent CC scaling.
-            \item Super-CC scaling is observed in some locations for extreme hourly or shorter accumulations.
-        \end{itemize}
-
-        \column{0.5\textwidth}
-        \centering
-        {\scriptsize Temperature scaling of rainfall intensities for 10-min resolution}
-        \includegraphics[width=0.8\textwidth]{./figs/fig2.png}
-    \end{columns}
+    \centering
+    {\scriptsize Temperature scaling of rainfall intensities for daily (CC scaling) and 10-min resolution (super-CC scaling)}
+    \includegraphics[width=0.9\textwidth]{./figs/fig2.png}
 \end{frame}
 
 \begin{frame}
-    \begin{columns}[onlytextwidth]
-        \column{0.5\textwidth}
-        \begin{itemize}
-            \item \textit{Apparent scaling depends on the temperature measurements used and the portion of the temperature range analysed.}
-            \item Near-surface air temperature commonly produces CC or super-CC rates for hourly rainfall at 10--20°C, but negative rates at >20--25°C.
-            \item Negative apparent scaling is explained by the drier conditions and the limited moisture availability on warm days, with high-pressure situations (high temperature, low RH).
-            \item Including moisture in the assessment (e.g \textbf{dew-point temperature}) increases the consistency in apparent scaling.
-            \item Understanding processes behind super-CC apparent scaling allow the exclusion of systematic dependencies irrelevant for climate scaling.
-        \end{itemize}
-
-        \column{0.5\textwidth}
-        \centering
-        \includegraphics[width=0.8\textwidth]{./figs/fig3.png}
-    \end{columns}
+    % \begin{itemize}
+    %     \item \textit{Apparent scaling depends on the temperature measurements used and the portion of the temperature range analysed.}
+    %     \item Near-surface air temperature commonly produces CC or super-CC rates for hourly rainfall at 10--20°C, but negative rates at >20--25°C.
+    %     \item Negative apparent scaling is explained by the drier conditions and the limited moisture availability on warm days, with high-pressure situations (high temperature, low RH).
+    %     \item Including moisture in the assessment (e.g \textbf{dew-point temperature}) increases the consistency in apparent scaling.
+    % \end{itemize}
+    \centering{
+    \includegraphics[width=0.9\textwidth]{./figs/fig3.png}
+    \begin{itemize}
+        \item Including moisture in the assessment increases consistency of apparent scaling.
+        \item Understanding processes behind super-CC apparent scaling allow the exclusion of systematic dependencies irrelevant for climate scaling. 
+    \end{itemize}
+    }
 \end{frame}
 
 % \begin{frame}
@@ -144,28 +133,36 @@
 \subsection{Findings from Convective Permitting Models (CPMs)}
 \begin{frame}
     \begin{itemize}
-        \item Traditional climate models use parameterizations for deep convection, missing the spatial details of convective motions.
-        \item CPMs use grid spacing <5 km, allowing them to explicitly resolve cloud dynamical processes.
-        \item CPMs consistently project higher intensification of sub-daily extremes (at or above CC) compared to coarser models.
+        \item CPMs use very-high-resolution grids, allowing them to explicitly resolve cloud dynamical processes.
+        \item CPMs consistently project higher intensification of sub-daily extremes (at or above CC) compared to coarser models. \pause
+        \item There is increase in peak intensities and frequencies for very rare rainfall extremes, decrease in frequency for moderate and light rainfall hours.
+        \begin{itemize}
+            \item Global precipitation is constrained by the global energy budget!
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
-\subsection{Storm Track Changes}
-\begin{frame}
-    \begin{itemize}
-        \item Some studies show storms becoming smaller but more intense (Australia/Germany), while others show both intensity and spatial size increasing (Netherlands).
-        \item An increase in both peak intensity and spatial footprint (storm size) can result in massive increases in total "event" rainfall.
-    \end{itemize}
-\end{frame}
+% \subsection{Storm Track Changes}
+% \begin{frame}
+%     \begin{itemize}
+%         \item Some studies show storms becoming smaller but more intense (Australia/Germany), while others show both intensity and spatial size increasing (Netherlands).
+%         \item \textbf{Based on MCSs study}: An increase in both peak intensity and spatial footprint (storm size) can result in massive increases in total "event" rainfall.
+%     \end{itemize}
+% \end{frame}
 
-
-\section{Physical Mechanisms}
+\section{Physical (Dynamical) Mechanisms}
 \begin{frame}
+     
     \centering
-    \includegraphics[width=0.9\textwidth]{./figs/fig5.png}
+    \includegraphics[width=0.95\textwidth]{./figs/fig5.png}
 
     \vspace{0.2cm}
     {\scriptsize Climate change-induced changes in extreme convective sub-daily precipitation processes}
+    
+    % \begin{block}{Mechanisms:}
+        % $\cdot$ Cloud-scale dynamics and microphysics \pause $\cdot$ Cloud-feedbacks and size effects 
+        % \pause $\cdot$ Large-scale stability, humidity and dynamics
+    % \end{block}
 \end{frame}
 
 
@@ -181,8 +178,8 @@
 \section{Conclusion}
 \begin{frame}
     \begin{itemize}
-        \item Short-duration extremes are intensifying at CC or super-CC rates due to thermodynamic and dynamical feedbacks.
-        \item There is an urgent need for climate-resilient engineering and adaptation measures, especially in urban areas, to manage the non-linear increase in flood risk.
+        \item Short-duration extremes are intensifying at CC or super-CC rates due to \textbf{thermodynamic and dynamical feedbacks}.
+        \item There is an urgent need for adaptation measures, especially in urban areas, to manage the \textbf{non-linear increase} in flood risk.
     \end{itemize}
 \end{frame}
 
